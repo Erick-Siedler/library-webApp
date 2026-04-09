@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --ink: #1a1714;
+  --parchment: #f5f0e8;
+  --warm-mid: #e8dfc9;
+  --amber: #c17f2a;
+  --amber-light: #e9a94a;
+  --muted: #7a7060;
+  --border: rgba(193,127,42,0.22);
+}
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* ── Header ── */
+.lib-header {
+  background: var(--ink);
+  padding: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  border-bottom: 1px solid rgba(193,127,42,0.18);
+}
+
+.lib-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+
+.lib-logo-icon {
+  width: 28px; height: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  align-items: end;
+}
+.lib-logo-icon span { background: var(--amber); border-radius: 1px; display: block; }
+.lib-logo-icon span:nth-child(1) { height: 12px; }
+.lib-logo-icon span:nth-child(2) { height: 20px; }
+.lib-logo-icon span:nth-child(3) { height: 16px; }
+
+.lib-logo-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--parchment);
+}
+.lib-logo-text em { color: var(--amber-light); font-style: italic; }
+
+.lib-nav { display: flex; gap: 4px; }
+.lib-nav a {
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 6px 16px;
+  border-radius: 4px;
+  color: rgba(245,240,232,0.6);
+  transition: background 0.15s, color 0.15s;
+}
+.lib-nav a:hover { color: var(--parchment); background: rgba(255,255,255,0.06); }
+.lib-nav a.active-link {
+  background: var(--amber);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ── Auth pages ── */
+.auth-page { min-height: 100vh; display: flex; flex-direction: column; background: var(--ink); }
+
+.auth-inner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 39px,
+    rgba(193,127,42,0.05) 39px, rgba(193,127,42,0.05) 40px
+  );
+}
+
+.auth-card {
+  background: var(--parchment);
+  border: 1px solid var(--warm-mid);
+  border-radius: 2px;
+  width: 100%;
+  max-width: 400px;
+  padding: 2.5rem 2.25rem;
+  position: relative;
+}
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px; right: -6px; bottom: -6px;
+  border: 1px solid rgba(193,127,42,0.25);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.auth-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.auth-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+}
+.auth-subtext { font-size: 13px; color: var(--muted); margin-bottom: 2rem; }
+.auth-subtext a { color: var(--amber); text-decoration: none; }
+.auth-subtext a:hover { text-decoration: underline; }
+
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.field input {
+  background: #fff;
+  border: 1px solid var(--warm-mid);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field input:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(193,127,42,0.12);
+}
+
+.auth-btn {
+  margin-top: 6px;
+  background: var(--amber);
+  border: none;
+  border-radius: 4px;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.auth-btn:hover { background: var(--amber-light); }
+.auth-btn:active { transform: scale(0.985); }
+
+/* ── Feedback ── */
+.feedback-msg { padding: 10px 12px; border-radius: 4px; font-size: 13px; margin-bottom: 1rem; }
+.feedback-success { background: #eaf5ee; color: #2d6a3f; border: 1px solid #b2d8be; }
+.feedback-error   { background: #fdf0ef; color: #a33025; border: 1px solid #f0c4bf; }
