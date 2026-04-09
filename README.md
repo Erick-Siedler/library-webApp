@@ -5,8 +5,8 @@ This project is a study-oriented application aimed at developing a Progressive W
 The main goal is to explore modern web technologies while building a functional and scalable solution.
 
 ## ⚙️ Functionalities
-- Basic authentication system  
-- User registration  
+- Basic authentication system  ✅
+- User registration  ✅
 - Book stock management  
 - Borrowing system  
 - Role-based access control  
