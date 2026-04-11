@@ -1,0 +1,36 @@
+$kind: http-request
+name: 'Delete Book'
+order: 10000
+method: POST
+url: '{{baseUrl}}/api/book/destroy'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": {{bookId}}
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Delete Book: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert success flag
+      pm.test("Delete Book: success is true", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.true;
+      });
+
+      // Assert message
+      pm.test("Delete Book: message is 'book deleted successfully'", function () {
+          const json = pm.response.json();
+          pm.expect(json.message).to.eql("book deleted successfully");
+      });

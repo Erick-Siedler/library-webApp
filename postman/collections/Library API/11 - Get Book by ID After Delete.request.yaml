@@ -1,0 +1,28 @@
+$kind: http-request
+name: 'Get Book by ID After Delete'
+order: 11000
+method: GET
+url: '{{baseUrl}}/api/book/{{bookId}}'
+headers:
+  - key: Accept
+    value: application/json
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 404 — book must no longer exist
+      pm.test("Get Book After Delete: status is 404", function () {
+          pm.response.to.have.status(404);
+      });
+
+      // Assert success is false
+      pm.test("Get Book After Delete: success is false", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.false;
+      });
+
+      // Assert message
+      pm.test("Get Book After Delete: message is 'book not found'", function () {
+          const json = pm.response.json();
+          pm.expect(json.message).to.eql("book not found");
+      });

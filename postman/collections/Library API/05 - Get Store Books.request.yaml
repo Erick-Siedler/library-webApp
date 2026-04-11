@@ -1,0 +1,36 @@
+$kind: http-request
+name: 'Get Store Books'
+order: 5000
+method: GET
+url: '{{baseUrl}}/api/store/books'
+headers:
+  - key: Accept
+    value: application/json
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Get Store Books: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert store object is present
+      pm.test("Get Store Books: response contains store object", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("store");
+      });
+
+      // Assert books array is present
+      pm.test("Get Store Books: response contains books array", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("books");
+          pm.expect(json.books).to.be.an("array");
+      });
+
+      // Assert store id matches the one we created
+      pm.test("Get Store Books: store id matches storeId variable", function () {
+          const json = pm.response.json();
+          const expectedId = parseInt(pm.environment.get("storeId") || pm.collectionVariables.get("storeId"));
+          pm.expect(json.store.id).to.eql(expectedId);
+      });

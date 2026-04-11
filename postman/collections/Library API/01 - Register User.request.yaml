@@ -1,0 +1,38 @@
+$kind: http-request
+name: 'Register User'
+order: 1000
+method: POST
+url: '{{baseUrl}}/api/register'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{userName}}",
+      "email": "{{userEmail}}",
+      "password": "{{userPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Register: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert success flag
+      pm.test("Register: success is true", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.true;
+      });
+
+      // Assert message
+      pm.test("Register: message is 'register attempt successful'", function () {
+          const json = pm.response.json();
+          pm.expect(json.message).to.eql("register attempt successful");
+      });
