@@ -1,0 +1,41 @@
+$kind: http-request
+name: 'Get Book by ID After Edit'
+order: 9000
+method: GET
+url: '{{baseUrl}}/api/book/{{bookId}}'
+headers:
+  - key: Accept
+    value: application/json
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Get Book After Edit: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert success flag
+      pm.test("Get Book After Edit: success is true", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.true;
+      });
+
+      // Assert updated title persisted
+      pm.test("Get Book After Edit: title reflects the edit", function () {
+          const json = pm.response.json();
+          pm.expect(json.book.title).to.eql("The Great Gatsby (Revised Edition)");
+      });
+
+      // Assert updated stock_quantity persisted
+      pm.test("Get Book After Edit: stock_quantity reflects the edit", function () {
+          const json = pm.response.json();
+          pm.expect(json.book.stock_quantity).to.eql(25);
+      });
+
+      // Assert book id still matches
+      pm.test("Get Book After Edit: book id matches bookId variable", function () {
+          const json = pm.response.json();
+          const expectedId = parseInt(pm.environment.get("bookId") || pm.collectionVariables.get("bookId"));
+          pm.expect(json.book.id).to.eql(expectedId);
+      });

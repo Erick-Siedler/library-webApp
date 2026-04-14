@@ -1,0 +1,35 @@
+$kind: collection
+name: Library API
+description: |-
+  Full end-to-end flow for the Laravel Library Web App API.
+  Covers: register → login → get user → create store → get store books →
+  create book → get book → edit book → get book (after edit) →
+  delete book → get book (after delete) → logout.
+
+  Auth is session-cookie based (Laravel Sanctum / web guard).
+  Run requests in order; scripts propagate storeId and bookId automatically.
+variables:
+  - key: baseUrl
+    value: 'http://localhost:8000'
+    description: Laravel dev server base URL (no trailing slash)
+  - key: userName
+    value: 'Test User'
+    description: Name used when registering the test user
+  - key: userEmail
+    value: 'testuser@library.dev'
+    description: Email used for register / login
+  - key: userPassword
+    value: 'secret123'
+    description: Password (min 6 chars)
+  - key: storeName
+    value: 'My Test Store'
+    description: Name for the store to be created
+  - key: storeDescription
+    value: 'A store created during automated testing'
+    description: Description for the store
+  - key: storeId
+    value: ''
+    description: Populated automatically after create store
+  - key: bookId
+    value: ''
+    description: Populated automatically after create book

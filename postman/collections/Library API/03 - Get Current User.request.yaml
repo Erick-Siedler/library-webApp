@@ -1,0 +1,35 @@
+$kind: http-request
+name: 'Get Current User'
+order: 3000
+method: GET
+url: '{{baseUrl}}/api/user'
+headers:
+  - key: Accept
+    value: application/json
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Get User: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert user object is present
+      pm.test("Get User: response contains user object", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("user");
+          pm.expect(json.user).to.be.an("object");
+      });
+
+      // Assert user email matches
+      pm.test("Get User: email matches registered email", function () {
+          const json = pm.response.json();
+          pm.expect(json.user.email).to.eql(pm.environment.get("userEmail") || pm.collectionVariables.get("userEmail"));
+      });
+
+      // Assert role defaults to admin (per migration)
+      pm.test("Get User: role is admin", function () {
+          const json = pm.response.json();
+          pm.expect(json.user.role).to.eql("admin");
+      });

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
+import Header from  './components/preAuth-header'
+import { Link, useLocation } from 'react-router-dom';
 
 export default function RegisForm() {
     const [name, setName] = useState('')
@@ -83,20 +85,52 @@ export default function RegisForm() {
 
     return (
         <>
-            {feedback ? (
-                <p className={`feedback ${feedbackType === 'success' ? 'feedback-success' : 'feedback-error'}`}>
+        <div className="auth-page">
+            <Header />
+            <main className="auth-inner">
+            <div className="auth-card">
+                <p className="auth-eyebrow">New membership</p>
+                <h1 className="auth-heading">Open your account.</h1>
+                <p className="auth-subtext">
+                Already a member? <Link to="/">Sign in here</Link>
+                </p>
+
+                {feedback && (
+                <p className={`feedback-msg ${feedbackType === 'success' ? 'feedback-success' : 'feedback-error'}`}>
                     {feedback}
                 </p>
-            ) : null}
+                )}
 
-            <form onSubmit={handleRegisSubmit}>
-                <input type="text" value={name}onChange={(e) => setName(e.target.value)} placeholder="Your name" autoComplete="name" required />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Youremail@gmail.com' autoComplete='email' required/>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' autoComplete="new-password" required/>
-                <input type="password" value={confirmed} onChange={(e) => setConfirmed(e.target.value)} placeholder="Repeat password" autoComplete="new-password" required />
-
-                <button type='submit'>Sign Up</button>
-            </form>
+                <form onSubmit={handleRegisSubmit} className="auth-form">
+                <div className="field">
+                    <label htmlFor="name">Full name</label>
+                    <input id="name" type="text" value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Your name" autoComplete="name" required />
+                </div>
+                <div className="field">
+                    <label htmlFor="email">Email address</label>
+                    <input id="email" type="email" value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="you@example.com" autoComplete="email" required />
+                </div>
+                <div className="field">
+                    <label htmlFor="password">Password</label>
+                    <input id="password" type="password" value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••" autoComplete="new-password" required />
+                </div>
+                <div className="field">
+                    <label htmlFor="confirmed">Confirm password</label>
+                    <input id="confirmed" type="password" value={confirmed}
+                    onChange={e => setConfirmed(e.target.value)}
+                    placeholder="••••••••" autoComplete="new-password" required />
+                </div>
+                <button type="submit" className="auth-btn">Create account</button>
+                </form>
+            </div>
+            </main>
+        </div>
         </>
     )
 }

@@ -1,0 +1,42 @@
+$kind: http-request
+name: 'Get Book by ID'
+order: 7000
+method: GET
+url: '{{baseUrl}}/api/book/{{bookId}}'
+headers:
+  - key: Accept
+    value: application/json
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Get Book: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert success flag
+      pm.test("Get Book: success is true", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.true;
+      });
+
+      // Assert book object is present
+      pm.test("Get Book: response contains book object", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("book");
+          pm.expect(json.book).to.be.an("object");
+      });
+
+      // Assert book id matches
+      pm.test("Get Book: book id matches bookId variable", function () {
+          const json = pm.response.json();
+          const expectedId = parseInt(pm.environment.get("bookId") || pm.collectionVariables.get("bookId"));
+          pm.expect(json.book.id).to.eql(expectedId);
+      });
+
+      // Assert title is the original title
+      pm.test("Get Book: title is 'The Great Gatsby'", function () {
+          const json = pm.response.json();
+          pm.expect(json.book.title).to.eql("The Great Gatsby");
+      });

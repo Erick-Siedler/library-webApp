@@ -1,0 +1,40 @@
+$kind: http-request
+name: 'Login'
+order: 2000
+method: POST
+url: '{{baseUrl}}/api/login'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{userEmail}}",
+      "password": "{{userPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Login: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert success flag
+      pm.test("Login: success is true", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.true;
+      });
+
+      // Assert message
+      pm.test("Login: message is 'login attempt successful'", function () {
+          const json = pm.response.json();
+          pm.expect(json.message).to.eql("login attempt successful");
+      });
+
+      // The session cookie is set automatically by Postman's cookie jar.
+      // No token extraction needed — subsequent requests rely on the cookie.

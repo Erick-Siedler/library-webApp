@@ -1,0 +1,54 @@
+$kind: http-request
+name: 'Create Store'
+order: 4000
+method: POST
+url: '{{baseUrl}}/api/store/create'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{storeName}}",
+      "description": "{{storeDescription}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Create Store: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert store object is present
+      pm.test("Create Store: response contains store object", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("store");
+          pm.expect(json.store).to.be.an("object");
+      });
+
+      // Assert store has an id
+      pm.test("Create Store: store has an id", function () {
+          const json = pm.response.json();
+          pm.expect(json.store).to.have.property("id");
+          pm.expect(json.store.id).to.be.a("number");
+      });
+
+      // Save storeId to environment and collection variables for downstream requests
+      const json = pm.response.json();
+      if (json.store && json.store.id) {
+          const id = String(json.store.id);
+          pm.environment.set("storeId", id);
+          pm.collectionVariables.set("storeId", id);
+          console.log("storeId saved:", id);
+      }
+
+      // Assert message
+      pm.test("Create Store: message is 'Store created successfully'", function () {
+          const json = pm.response.json();
+          pm.expect(json.message).to.eql("Store created successfully");
+      });

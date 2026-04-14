@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Header from './components/preAuth-header'
+import { useAuth } from '../routing/auth-context'
+import { Link, useLocation } from 'react-router-dom';
+import './login-regis.css'
 
 export default function LoginForm() {
     const [email, setEmail] = useState('')
@@ -8,6 +12,7 @@ export default function LoginForm() {
     const [feedbackType, setFeedbackType] = useState('')
 
     const navigate = useNavigate()
+    const { markAuthenticated } = useAuth()
     const apiBaseUrl = `http://${window.location.hostname}:8000`
 
     async function handleLoginSubmit(e){
@@ -58,7 +63,8 @@ export default function LoginForm() {
             setFeedbackType(authenticated ? 'success' : 'error')
 
             if (authenticated) {
-                navigate('/home')
+                markAuthenticated(result.user ?? { email })
+                navigate('/home', { replace: true })
             }
         }
         catch(error){
@@ -69,17 +75,40 @@ export default function LoginForm() {
     }
     return(
         <>  
-            {feedback ? (
-                <p className={`feedback ${feedbackType === 'success' ? 'feedback-success' : 'feedback-error'}`}>
+        <div className="auth-page">
+            <Header />
+            <main className="auth-inner">
+            <div className="auth-card">
+                <p className="auth-eyebrow">Member access</p>
+                <h1 className="auth-heading">Welcome back.</h1>
+                <p className="auth-subtext">
+                No account yet? <Link to="/register">Create one free</Link>
+                </p>
+
+                {feedback && (
+                <p className={`feedback-msg ${feedbackType === 'success' ? 'feedback-success' : 'feedback-error'}`}>
                     {feedback}
                 </p>
-            ) : null}
+                )}
 
-            <form onSubmit={handleLoginSubmit} className='FormLogin'>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Youremail@gmail.com' autoComplete='email' required/>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' autoComplete="current-password" required/>
-                <button type='submit'>Sign in</button>
-            </form>
+                <form onSubmit={handleLoginSubmit} className="auth-form">
+                <div className="field">
+                    <label htmlFor="email">Email address</label>
+                    <input id="email" type="email" value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="you@example.com" autoComplete="email" required />
+                </div>
+                <div className="field">
+                    <label htmlFor="password">Password</label>
+                    <input id="password" type="password" value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••" autoComplete="current-password" required />
+                </div>
+                <button type="submit" className="auth-btn">Sign in</button>
+                </form>
+            </div>
+            </main>
+        </div>
         </>
     )
 }

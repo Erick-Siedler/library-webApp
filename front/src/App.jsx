@@ -2,9 +2,9 @@ import {Routes, Route} from 'react-router-dom'
 import LoginForm from './pre-auth/login'
 import RegisForm from './pre-auth/regis'
 import Home from  './post-auth/home'
-import GuestRoute from './components/guest-route'
-import PrivateRoute from './components/private-route'
-import NotFound from './components/notfound'
+import GuestRoute from './routing/guest-route'
+import PrivateRoute from './routing/private-route'
+import NotFound from './routing/notfound'
 import './App.css'
 
 function App() {

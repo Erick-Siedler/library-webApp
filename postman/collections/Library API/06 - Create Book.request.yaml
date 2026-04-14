@@ -1,0 +1,73 @@
+$kind: http-request
+name: 'Create Book'
+order: 6000
+method: POST
+url: '{{baseUrl}}/api/book/create'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "store_id": {{storeId}},
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "genre": "Classic Fiction",
+      "publisher": "Scribner",
+      "pub_year": 1925,
+      "ISBN": "9780743273565",
+      "stock_quantity": 10,
+      "available": true
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 201
+      pm.test("Create Book: status is 201", function () {
+          pm.response.to.have.status(201);
+      });
+
+      // Assert success flag
+      pm.test("Create Book: success is true", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.true;
+      });
+
+      // Assert book object is present
+      pm.test("Create Book: response contains book object", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("book");
+          pm.expect(json.book).to.be.an("object");
+      });
+
+      // Assert book has an id
+      pm.test("Create Book: book has an id", function () {
+          const json = pm.response.json();
+          pm.expect(json.book).to.have.property("id");
+          pm.expect(json.book.id).to.be.a("number");
+      });
+
+      // Save bookId to environment and collection variables for downstream requests
+      const json = pm.response.json();
+      if (json.book && json.book.id) {
+          const id = String(json.book.id);
+          pm.environment.set("bookId", id);
+          pm.collectionVariables.set("bookId", id);
+          console.log("bookId saved:", id);
+      }
+
+      // Assert message
+      pm.test("Create Book: message is 'book created successfully'", function () {
+          const json = pm.response.json();
+          pm.expect(json.message).to.eql("book created successfully");
+      });
+
+      // Assert title matches
+      pm.test("Create Book: title matches payload", function () {
+          const json = pm.response.json();
+          pm.expect(json.book.title).to.eql("The Great Gatsby");
+      });

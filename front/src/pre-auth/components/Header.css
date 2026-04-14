@@ -1,0 +1,47 @@
+.lib-header {
+  background: var(--ink);
+  padding: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  border-bottom: 1px solid rgba(193,127,42,0.18);
+}
+
+.lib-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+
+.lib-logo-icon {
+  width: 28px; height: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  align-items: end;
+}
+.lib-logo-icon span { background: var(--amber); border-radius: 1px; display: block; }
+.lib-logo-icon span:nth-child(1) { height: 12px; }
+.lib-logo-icon span:nth-child(2) { height: 20px; }
+.lib-logo-icon span:nth-child(3) { height: 16px; }
+
+.lib-logo-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--parchment);
+}
+.lib-logo-text em { color: var(--amber-light); font-style: italic; }
+
+.lib-nav { display: flex; gap: 4px; }
+.lib-nav a {
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 6px 16px;
+  border-radius: 4px;
+  color: rgba(245,240,232,0.6);
+  transition: background 0.15s, color 0.15s;
+}
+.lib-nav a:hover { color: var(--parchment); background: rgba(255,255,255,0.06); }
+.lib-nav a.active-link {
+  background: var(--amber);
+  color: var(--ink);
+  font-weight: 500;
+}

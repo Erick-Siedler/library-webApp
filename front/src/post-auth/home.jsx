@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../routing/auth-context'
 
 export default function Home() {
   const navigate = useNavigate()
+  const { clearAuth } = useAuth()
   const apiBaseUrl = `http://${window.location.hostname}:8000`
 
   async function handleLogout() {
@@ -27,6 +29,7 @@ export default function Home() {
         },
       })
     } finally {
+      clearAuth()
       navigate('/', { replace: true })
     }
   }

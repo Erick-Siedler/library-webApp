@@ -1,0 +1,58 @@
+$kind: http-request
+name: 'Edit Book'
+order: 8000
+method: POST
+url: '{{baseUrl}}/api/book/edit'
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": {{bookId}},
+      "title": "The Great Gatsby (Revised Edition)",
+      "stock_quantity": 25,
+      "available": true
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Assert HTTP 200
+      pm.test("Edit Book: status is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      // Assert success flag
+      pm.test("Edit Book: success is true", function () {
+          const json = pm.response.json();
+          pm.expect(json.success).to.be.true;
+      });
+
+      // Assert message
+      pm.test("Edit Book: message is 'book updated successfully'", function () {
+          const json = pm.response.json();
+          pm.expect(json.message).to.eql("book updated successfully");
+      });
+
+      // Assert book object is present
+      pm.test("Edit Book: response contains book object", function () {
+          const json = pm.response.json();
+          pm.expect(json).to.have.property("book");
+          pm.expect(json.book).to.be.an("object");
+      });
+
+      // Assert updated title
+      pm.test("Edit Book: title was updated", function () {
+          const json = pm.response.json();
+          pm.expect(json.book.title).to.eql("The Great Gatsby (Revised Edition)");
+      });
+
+      // Assert updated stock_quantity
+      pm.test("Edit Book: stock_quantity was updated to 25", function () {
+          const json = pm.response.json();
+          pm.expect(json.book.stock_quantity).to.eql(25);
+      });
